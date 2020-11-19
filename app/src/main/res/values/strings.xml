@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">EasyShop</string>
+    <string name="title_home">QR Scan</string>
+    <string name="title_dashboard">Cart</string>
+    <string name="title_notifications">Bill</string>
+
+    <string name="camera_permission_explanation">I need to access your camera to scan the QR code</string>
+    <string name="permission_required_dialog_title">Necessary permission</string>
+    <string name="permission_required_dialog_content">I need the camera permission to let you scan the QR code</string>
+    <string name="turn_on_flash">Turn on flash</string>
+    <string name="qr_result_open">Open</string>
+    <string name="qr_result_copy">Copy</string>
+    <string name="qr_result_share">Share</string>
+    <string name="qr_result_scan_another">Scan another</string>
+    <string name="scan_instructions">Just frame the QR code and it will be recognized automatically</string>
+    <string name="want_to_add">Do you want to add this item to cart?</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+
+    <string-array name="phone_number_content" translatable="false">
+        <item>+201007686386</item>
+        <item>+201119589396</item>
+    </string-array>
+</resources>
