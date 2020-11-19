@@ -2,6 +2,7 @@ package com.ec.shop.utils
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.google.android.material.snackbar.Snackbar
@@ -10,6 +11,7 @@ fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
 
 }
+
 
 fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -33,4 +35,10 @@ fun View.showSnackBar(
 fun Snackbar.action(actionRes: String, color: Int? = null, listener: (View) -> Unit) {
     setAction(actionRes, listener)
     color?.let { setActionTextColor(color) }
+}
+
+fun <T> Context.openActivity(it: Class<T>) {
+    val intent = Intent(this, it)
+    startActivity(intent)
+
 }

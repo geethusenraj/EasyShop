@@ -35,6 +35,7 @@ class LoginActivity : BaseActivity() {
         )
         defineObservers()
 
+
         mBinder.tvAutocomplete.setAdapter(adapter)
 
         viewModel.setPhoneNumber()
