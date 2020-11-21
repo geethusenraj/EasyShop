@@ -7,84 +7,151 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ec.shop.R
+import com.ec.shop.ui.dialog.QrCodeResultDialog
 import com.ec.shop.utils.showSnackBar
 import com.google.zxing.BarcodeFormat
-import com.google.zxing.ResultPoint
 import com.google.zxing.client.android.BeepManager
-import com.journeyapps.barcodescanner.BarcodeCallback
-import com.journeyapps.barcodescanner.BarcodeResult
-import com.journeyapps.barcodescanner.DecoratedBarcodeView
-import com.journeyapps.barcodescanner.DefaultDecoderFactory
+import kotlinx.android.synthetic.main.fragment_scan.view.*
+import me.dm7.barcodescanner.zbar.Result
+import me.dm7.barcodescanner.zbar.ZBarScannerView
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
+class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks,
+    ZBarScannerView.ResultHandler {
 
     private lateinit var beepManager: BeepManager
-    private lateinit var scannerView: DecoratedBarcodeView
+//    private lateinit var scannerView: DecoratedBarcodeView
+
+    private lateinit var mView: View
+    lateinit var scannerView: ZBarScannerView
     private lateinit var alertDialog: AlertDialog
+    private lateinit var resultDialog: QrCodeResultDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_scan, container, false)
+        mView = inflater.inflate(R.layout.fragment_scan, container, false)
+        return mView.rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        scannerView = view.findViewById(R.id.QRScannerView)
+        initViews()
+//        scannerView = view.findViewById(R.id.QRScannerView)
 
         val formats = mutableListOf(BarcodeFormat.QR_CODE)
         beepManager = BeepManager(requireActivity())
-        scannerView.barcodeView.decoderFactory = DefaultDecoderFactory(formats)
-        scannerView.setStatusText("")
+//        scannerView.barcodeView.decoderFactory = DefaultDecoderFactory(formats)
+//        scannerView.setStatusText("")
 
-        scannerView.decodeContinuous(object : BarcodeCallback {
-            override fun barcodeResult(result: BarcodeResult?) {
-                result?.let {
-                    beepManager.isBeepEnabled = false
-                    beepManager.playBeepSoundAndVibrate()
-
-                    showConfirmationDialog(result.text)
-                }
-            }
-
-            override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
-            }
-        })
+//        scannerView.decodeContinuous(object : BarcodeCallback {
+//            override fun barcodeResult(result: BarcodeResult?) {
+//                result?.let {
+//                    beepManager.isBeepEnabled = false
+//                    beepManager.playBeepSoundAndVibrate()
+//
+//                    setResultDialog(result.text)
+////                    showConfirmationDialog(result.text)
+//                }
+//            }
+//
+//            override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
+//            }
+//        })
 
         checkPermissionsAndStartQRScan()
     }
 
+    private fun initViews() {
+        initializeQRCamera()
+        setResultDialog()
+    }
+
+    private fun initializeQRCamera() {
+        scannerView = ZBarScannerView(context)
+        scannerView.setResultHandler(this)
+        scannerView.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorTranslucent
+            )
+        )
+        scannerView.setBorderColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorPrimaryDark
+            )
+        )
+        scannerView.setLaserColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorPrimaryDark
+            )
+        )
+        scannerView.setBorderStrokeWidth(10)
+        scannerView.setSquareViewFinder(true)
+        scannerView.setupScanner()
+        scannerView.setAutoFocus(true)
+        startQRCamera()
+        mView.containerScanner.addView(scannerView)
+    }
+
+    private fun startQRCamera() {
+        scannerView.startCamera()
+    }
+
+    private fun resetPreview() {
+        scannerView.stopCamera()
+        scannerView.startCamera()
+        scannerView.stopCameraPreview()
+        scannerView.resumeCameraPreview(this)
+    }
+
+    private fun setResultDialog() {
+        resultDialog = QrCodeResultDialog(requireContext())
+        resultDialog.setOnDismissListener(object : QrCodeResultDialog.OnDismissListener {
+            override fun onDismiss() {
+                resetPreview()
+            }
+        })
+    }
+
+    private fun saveToDataBase(decodedResult: String) {
+        resultDialog.show(decodedResult)
+        Toast.makeText(context, decodedResult, Toast.LENGTH_SHORT).show()
+    }
+
+
     private fun showConfirmationDialog(qrData: String?) {
         val inflater: LayoutInflater = this.layoutInflater
         val dialogView: View = inflater.inflate(R.layout.dialog_custom_view, null)
-
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        dialogBuilder.setOnDismissListener { }
+        dialogBuilder.setView(dialogView)
+        alertDialog = dialogBuilder.create();
         val tvQrData = dialogView.findViewById<TextView>(R.id.qrContent)
-        tvQrData.text = qrData
-        val btnScanAgain: Button = dialogView.findViewById(R.id.btnScanAgain)
+//        val btnScanAgain: Button = dialogView.findViewById(R.id.btnScanAgain)
         val btnCancel: Button = dialogView.findViewById(R.id.btnCancel)
         val btnAdd: Button = dialogView.findViewById(R.id.btnOk)
-        btnScanAgain.setOnClickListener {
-            alertDialog.cancel()
-        }
+        tvQrData.text = qrData
+//        btnScanAgain.setOnClickListener {
+//            alertDialog.cancel()
+//        }
         btnAdd.setOnClickListener {
             it.showSnackBar("Added")
         }
         btnCancel.setOnClickListener {
-            alertDialog.dismiss()
+            alertDialog.cancel()
         }
-        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setOnDismissListener { }
-        dialogBuilder.setView(dialogView)
-
-        alertDialog = dialogBuilder.create();
-        alertDialog.window!!.getAttributes().windowAnimations =
+        alertDialog.window!!.attributes.windowAnimations =
             R.style.Theme_MaterialComponents_Dialog
         alertDialog.show()
     }
@@ -106,12 +173,12 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     override fun onPause() {
         super.onPause()
-        scannerView.pause()
+//        scannerView.pause()
     }
 
     override fun onResume() {
         super.onResume()
-        scannerView.resume()
+//        scannerView.resume()
     }
 
     override fun onRequestPermissionsResult(
@@ -148,20 +215,31 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun openScanner() {
-        scannerView.resume()
+//        scannerView.resume()
     }
 
-    fun enableFlash(enable: Boolean) {
-        if (enable) {
-            scannerView.setTorchOn();
-        } else {
-            scannerView.setTorchOff()
-        }
-    }
+//    fun enableFlash(enable: Boolean) {
+//        if (enable) {
+//            scannerView.setTorchOn();
+//        } else {
+//            scannerView.setTorchOff()
+//        }
+//    }
 
     companion object {
         const val RC_CAMERA = 1
         const val SCANNER_FRAGMENT_TAG = "Scanner Fragment TAG"
+    }
+
+    override fun handleResult(rawResult: Result?) {
+        onQrResult(rawResult?.contents)
+    }
+
+    private fun onQrResult(contents: String?) {
+        if (contents.isNullOrEmpty())
+            Toast.makeText(context, "Empty Qr Result", Toast.LENGTH_SHORT).show()
+        else
+            saveToDataBase(contents)
     }
 }
 

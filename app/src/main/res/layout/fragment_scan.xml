@@ -25,13 +25,14 @@
         android:layout_marginEnd="34dp"
         android:gravity="center"
         android:text="@string/scan_instructions"
-        app:layout_constraintBottom_toTopOf="@id/QRScannerView"
+        app:layout_constraintBottom_toTopOf="@id/containerScanner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline" />
 
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
-        android:id="@+id/QRScannerView"
+
+    <FrameLayout
+        android:id="@+id/containerScanner"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="17dp"
@@ -44,6 +45,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hint" />
+
+
+    <!--    <com.journeyapps.barcodescanner.DecoratedBarcodeView-->
+    <!--        android:id="@+id/QRScannerView"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_marginStart="17dp"-->
+    <!--        android:layout_marginTop="34dp"-->
+    <!--        android:layout_marginEnd="17dp"-->
+    <!--        android:layout_marginBottom="17dp"-->
+    <!--        android:foregroundGravity="center"-->
+    <!--        android:visibility="visible"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/hint" />-->
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
