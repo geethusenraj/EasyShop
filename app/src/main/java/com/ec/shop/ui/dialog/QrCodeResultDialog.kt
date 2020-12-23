@@ -3,7 +3,6 @@ package com.ec.shop.ui.dialog
 import android.app.Dialog
 import android.content.Context
 import com.ec.shop.R
-import com.ec.shop.utils.showSnackBar
 import kotlinx.android.synthetic.main.layout_qr_result_show.*
 
 class QrCodeResultDialog(var context: Context) {
@@ -29,8 +28,9 @@ class QrCodeResultDialog(var context: Context) {
             onDismissListener?.onDismiss()
         }
         dialog.addDialog.setOnClickListener {
-            it.showSnackBar("Added")
+//            it.showSnackBar("Added")
             dialog.dismiss()
+            onDismissListener?.onAdd()
             onDismissListener?.onDismiss()
         }
     }
@@ -47,6 +47,7 @@ class QrCodeResultDialog(var context: Context) {
 
     interface OnDismissListener {
         fun onDismiss()
+        fun onAdd();
     }
 
 }

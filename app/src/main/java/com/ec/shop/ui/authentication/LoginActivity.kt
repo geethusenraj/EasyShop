@@ -10,8 +10,10 @@ import com.ec.shop.constants.Constants
 import com.ec.shop.databinding.ActivityLoginBinding
 import com.ec.shop.listeners.ProjectEventListeners
 import com.ec.shop.ui.BaseActivity
+import com.ec.shop.ui.HomeActivity
 import com.ec.shop.utils.ViewModelFactory
 import com.ec.shop.utils.hideKeyboard
+import com.ec.shop.utils.openActivity
 import com.ec.shop.utils.showSnackBar
 import com.google.firebase.auth.PhoneAuthProvider
 import java.util.concurrent.TimeUnit
@@ -59,6 +61,8 @@ class LoginActivity : BaseActivity() {
         })
         viewModel.otpStatus.observe(this, Observer {
             mBinder.root.showSnackBar(it)
+            if (it == "Correct OTP")
+                openActivity(HomeActivity::class.java);
         })
         viewModel.otpTimer.observe(this, Observer {
             Log.e("TIMER_it", it)
