@@ -14,6 +14,7 @@ import com.ec.shop.constants.Constants.Companion.SHOW_DIALOG
 import com.ec.shop.ui.dialog.QrCodeResultDialog
 import com.ec.shop.utils.ViewModelFactory
 import com.ec.shop.utils.showSnackBar
+import kotlinx.android.synthetic.main.fragment_scan.*
 import kotlinx.android.synthetic.main.fragment_scan.view.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
@@ -43,7 +44,15 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     ): View? {
         mView = inflater.inflate(R.layout.fragment_scan, container, false)
         viewModel.scannerViewItem.observe(requireActivity(), Observer {
-            mView.containerScanner.addView(it)
+            if (it != null) {
+                if (mView.parent != null) {
+                    (containerScanner.parent as ViewGroup).removeView(containerScanner) // <- fix
+                }
+                if (containerScanner != null) {
+                    (mView.parent as ViewGroup).addView(containerScanner)
+                    mView.containerScanner.addView(it)
+                }
+            }
         })
         viewModel.showQRDialog.observe(requireActivity(), Observer {
             if (it == SHOW_DIALOG) setResultDialog()
