@@ -10,5 +10,6 @@
     <color name="lightColor">#64E71A</color>
     <color name="lightGray">#D1D0D0</color>
     <color name="darkBrown">#2B2828</color>
+    <color name="grey">#937B7B</color>
     <color name="black">#000000</color>
 </resources>

@@ -28,7 +28,6 @@ class QrCodeResultDialog(var context: Context) {
             onDismissListener?.onDismiss()
         }
         dialog.addDialog.setOnClickListener {
-//            it.showSnackBar("Added")
             dialog.dismiss()
             onDismissListener?.onAdd()
             onDismissListener?.onDismiss()
@@ -40,7 +39,12 @@ class QrCodeResultDialog(var context: Context) {
     }
 
     fun show(decodedResult: String) {
-        dialog.scannedText.text = decodedResult
+        if (decodedResult.contains("*")) {
+            val textSplit = decodedResult.split("*")
+            val customText = textSplit[1] + " =  Rs." + textSplit[2] + "-/-"
+            dialog.scannedText.text = customText
+        }
+        dialog.tvAsk.text = context.getString(R.string.want_to_add)
         dialog.show()
     }
 

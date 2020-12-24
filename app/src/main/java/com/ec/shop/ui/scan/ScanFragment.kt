@@ -5,24 +5,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ec.shop.R
-import com.ec.shop.constants.Constants.Companion.SHOW_DIALOG
 import com.ec.shop.ui.dialog.QrCodeResultDialog
 import com.ec.shop.utils.ViewModelFactory
 import com.ec.shop.utils.showSnackBar
-import kotlinx.android.synthetic.main.fragment_scan.*
 import kotlinx.android.synthetic.main.fragment_scan.view.*
+import me.dm7.barcodescanner.zbar.Result
+import me.dm7.barcodescanner.zbar.ZBarScannerView
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
+class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks,
+    ZBarScannerView.ResultHandler {
 
     private lateinit var mView: View
     private lateinit var viewModel: ScanViewModel
+    private lateinit var scannerView: ZBarScannerView
     private lateinit var resultDialog: QrCodeResultDialog
 
     companion object {
@@ -43,29 +46,47 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         savedInstanceState: Bundle?
     ): View? {
         mView = inflater.inflate(R.layout.fragment_scan, container, false)
-        viewModel.scannerViewItem.observe(requireActivity(), Observer {
-            if (it != null) {
-                if (mView.parent != null) {
-                    (containerScanner.parent as ViewGroup).removeView(containerScanner) // <- fix
-                }
-                if (containerScanner != null) {
-                    (mView.parent as ViewGroup).addView(containerScanner)
-                    mView.containerScanner.addView(it)
-                }
-            }
-        })
-        viewModel.showQRDialog.observe(requireActivity(), Observer {
-            if (it == SHOW_DIALOG) setResultDialog()
-            else resultDialog.show(it.toString())
-            setResultDialog()
-        })
         return mView.rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.initViews()
+        initViews()
         checkPermissionsAndStartQRScan()
+    }
+
+    private fun initViews() {
+        initializeQRCamera()
+        setResultDialog()
+    }
+
+    private fun initializeQRCamera() {
+        scannerView = ZBarScannerView(requireContext())
+        scannerView.setResultHandler(this)
+        scannerView.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorTranslucent
+            )
+        )
+        scannerView.setBorderColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorPrimaryDark
+            )
+        )
+        scannerView.setLaserColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.colorPrimaryDark
+            )
+        )
+        scannerView.setBorderStrokeWidth(10)
+        scannerView.setSquareViewFinder(true)
+        scannerView.setupScanner()
+        scannerView.setAutoFocus(true)
+        startQRCamera()
+        mView.containerScanner.addView(scannerView)
     }
 
 
@@ -73,7 +94,7 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         resultDialog = QrCodeResultDialog(requireContext())
         resultDialog.setOnDismissListener(object : QrCodeResultDialog.OnDismissListener {
             override fun onDismiss() {
-                viewModel.resetPreview()
+                resetPreview()
             }
 
             override fun onAdd() {
@@ -82,12 +103,19 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         })
     }
 
+    private fun resetPreview() {
+        scannerView.stopCamera()
+        scannerView.startCamera()
+        scannerView.stopCameraPreview()
+        scannerView.resumeCameraPreview(this)
+    }
+
     @AfterPermissionGranted(RC_CAMERA)
     private fun checkPermissionsAndStartQRScan() {
         val permission = Manifest.permission.CAMERA
         if (EasyPermissions.hasPermissions(requireContext(), permission)) {
             // Already have permission, do the thing
-            viewModel.startQRCamera()
+            startQRCamera()
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(
@@ -95,6 +123,10 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 RC_CAMERA, permission
             )
         }
+    }
+
+    private fun startQRCamera() {
+        scannerView.startCamera()
     }
 
 
@@ -127,6 +159,27 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+
+    }
+
+    override fun handleResult(rawResult: Result?) {
+        onQrResult(rawResult?.contents)
+
+    }
+
+    private fun onQrResult(contents: String?) {
+        if (contents.isNullOrEmpty())
+            Toast.makeText(
+                requireContext(),
+                R.string.empty_result, Toast.LENGTH_SHORT
+            )
+                .show()
+        else
+            saveToDataBase(contents)
+    }
+
+    private fun saveToDataBase(contents: String) {
+        resultDialog.show(contents.toString())
 
     }
 
