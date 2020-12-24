@@ -97,7 +97,8 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks,
                 resetPreview()
             }
 
-            override fun onAdd() {
+            override fun onAdd(qrResult: String) {
+                viewModel.addProductToDb(qrResult)
                 mView.showSnackBar(getString(R.string.add_to_cart))
             }
         })
@@ -179,7 +180,7 @@ class ScanFragment : Fragment(), EasyPermissions.PermissionCallbacks,
     }
 
     private fun saveToDataBase(contents: String) {
-        resultDialog.show(contents.toString())
+        resultDialog.show(contents)
 
     }
 

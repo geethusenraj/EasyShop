@@ -1,6 +1,9 @@
 package com.ec.shop.data.db.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.ec.shop.data.db.models.Product
 
 
 @Entity(
@@ -8,5 +11,23 @@ import androidx.room.Entity
     primaryKeys = ["Id"]
 )
 class CartEntity {
+    constructor(product: Product) : this() {
+        this.name = product.productName
+        this.rate = product.productRate
+
+    }
+
+    constructor()
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "Id")
+    var id: Long = 0
+
+    @ColumnInfo(name = "ProductName")
+    var name: String? = null
+
+    @ColumnInfo(name = "ProductRate")
+    var rate: String? = null
+
 
 }
