@@ -7,8 +7,7 @@ import com.ec.shop.data.db.models.Product
 
 
 @Entity(
-    tableName = "CartTable",
-    primaryKeys = ["Id"]
+    tableName = "CartTable"
 )
 class CartEntity {
     constructor(product: Product) : this() {
@@ -29,5 +28,6 @@ class CartEntity {
     @ColumnInfo(name = "ProductRate")
     var rate: String? = null
 
-
+    @ColumnInfo(name = "Quantity")
+    var quantity: Int = 0
 }

@@ -9,8 +9,8 @@ class CartRepository(private val application: Application) {
 
     private val cartDao = AppDataBase.getDatabase(application).getCartDao()
 
-    fun saveUserData(product: Product) {
-        cartDao.insertAll(CartEntity(product))
+    suspend fun saveUserData(product: Product) {
+        cartDao.upsert(CartEntity(product))
     }
 
 }
