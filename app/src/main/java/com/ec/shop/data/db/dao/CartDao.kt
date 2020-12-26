@@ -1,5 +1,6 @@
 package com.ec.shop.data.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.ec.shop.data.db.entities.CartEntity
 
@@ -29,4 +30,6 @@ interface CartDao {
     @Query("UPDATE CartTable SET Quantity=:quantity WHERE ProductName =:name")
     suspend fun updateCart(name: String?, quantity: Int)
 
+    @Query("SELECT * FROM CartTable")
+    fun getData(): LiveData<List<CartEntity>>
 }
