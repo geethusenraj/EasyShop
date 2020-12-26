@@ -1,5 +1,6 @@
 package com.ec.shop.ui.bill
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,9 @@ import com.ec.shop.R
 import com.ec.shop.ui.adapters.CartRecyclerViewAdapter
 import com.ec.shop.ui.cart.CartViewModel
 import com.ec.shop.utils.ViewModelFactory
+import kotlinx.android.synthetic.main.fragment_bill.view.*
 import kotlinx.android.synthetic.main.fragment_cart.view.*
+import kotlinx.android.synthetic.main.fragment_cart.view.recyclerView
 
 class BillFragment : Fragment() {
 
@@ -29,6 +32,7 @@ class BillFragment : Fragment() {
         ).get(CartViewModel::class.java)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,6 +48,9 @@ class BillFragment : Fragment() {
                 addCartData(it)
                 notifyDataSetChanged()
             }
+            val billAmount = it.map { price -> price.total }.sum()
+            root.tvTotalBill.text = "Rs.$billAmount-/-"
+
         })
 
         return root

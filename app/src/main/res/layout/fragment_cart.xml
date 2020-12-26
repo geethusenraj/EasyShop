@@ -27,8 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Product"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                android:text="Product" />
 
         </LinearLayout>
 
@@ -43,8 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Quantity"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                android:text="Quantity" />
 
         </LinearLayout>
 
@@ -59,8 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Rate"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                android:text="Rate" />
 
         </LinearLayout>
     </LinearLayout>

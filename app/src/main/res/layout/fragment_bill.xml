@@ -4,14 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.bill.BillFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/sp_200"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/row_item_cart" />
+        app:layout_constraintBottom_toTopOf="@id/layoutTotal"
+        tools:listitem="@layout/row_item_bill" />
+
+    <LinearLayout
+        android:id="@+id/layoutTotal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sp_50"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintTop_toBottomOf="@id/recyclerView">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight=".5"
+            android:text="Total : "
+            android:textSize="@dimen/sp_26"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTotalBill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:layout_weight=".5"
+            android:text="Rs. "
+            android:textSize="@dimen/sp_26"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btBill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/sp_12"
+        android:text="@string/generate_bill"
+        app:layout_constraintTop_toBottomOf="@id/layoutTotal" />
 </androidx.constraintlayout.widget.ConstraintLayout>

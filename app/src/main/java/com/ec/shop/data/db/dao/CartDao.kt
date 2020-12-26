@@ -33,4 +33,5 @@ interface CartDao {
 
     @Query("SELECT * FROM CartTable")
     fun getData(): LiveData<List<CartEntity>>
+
 }

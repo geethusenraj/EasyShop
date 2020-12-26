@@ -9,7 +9,7 @@ import com.ec.shop.data.repositories.CartRepository
 
 class CartViewModel(
     private val application: Application,
-    private val cartRepository: CartRepository
+    cartRepository: CartRepository
 ) : ViewModel() {
     var productData: LiveData<List<CartEntity>> = MutableLiveData()
 

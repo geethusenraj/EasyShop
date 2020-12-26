@@ -27,4 +27,6 @@
     <dimen name="sp_100">100sp</dimen>
     <dimen name="sp_120">120sp</dimen>
     <dimen name="sp_150">150sp</dimen>
+    <dimen name="sp_180">180sp</dimen>
+    <dimen name="sp_200">200sp</dimen>
 </resources>
