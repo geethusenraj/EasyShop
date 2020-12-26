@@ -6,8 +6,10 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/sp_80"
+        android:layout_margin="@dimen/sp_12"
         android:layout_marginTop="@dimen/sp_12"
+        android:elevation="@dimen/sp_12"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -24,10 +26,10 @@
 
                 <TextView
                     android:id="@+id/tvProductName"
+                    style="@style/TextAppearance.SecureQRReader.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="Product" />
+                    android:padding="5dp" />
 
             </LinearLayout>
 
@@ -44,10 +46,10 @@
 
                 <TextView
                     android:id="@+id/tvQuantity"
+                    style="@style/TextAppearance.SecureQRReader.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="Quantity" />
+                    android:padding="5dp" />
 
             </LinearLayout>
 
@@ -59,10 +61,10 @@
 
                 <TextView
                     android:id="@+id/tvRate"
+                    style="@style/TextAppearance.SecureQRReader.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="Price" />
+                    android:padding="5dp" />
 
             </LinearLayout>
 
@@ -70,13 +72,13 @@
                 android:id="@+id/layoutDelete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
                 android:layout_weight=".4"
                 android:visibility="visible">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
                     android:src="@drawable/delete" />
 
 

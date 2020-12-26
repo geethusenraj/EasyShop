@@ -7,7 +7,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/sp_12"
+        android:elevation="@dimen/sp_12"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -23,10 +23,10 @@
 
                 <TextView
                     android:id="@+id/tvProductName"
+                    style="@style/TextAppearance.SecureQRReader.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="Product" />
+                    android:padding="5dp" />
 
             </LinearLayout>
 
@@ -42,10 +42,11 @@
 
                 <TextView
                     android:id="@+id/tvQuantity"
+                    style="@style/TextAppearance.SecureQRReader.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:text="Qty" />
+                    android:textColor="@color/grey" />
 
             </LinearLayout>
 
@@ -62,19 +63,20 @@
 
                     <TextView
                         android:id="@+id/tvRate"
+                        style="@style/TextAppearance.SecureQRReader.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="Price" />
+                        android:textColor="@color/grey" />
 
                     <TextView
                         android:id="@+id/tvCalc"
+                        style="@style/TextAppearance.SecureQRReader.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:padding="5dp"
-                        android:text="= " />
+                        android:padding="5dp" />
                 </LinearLayout>
             </LinearLayout>
 

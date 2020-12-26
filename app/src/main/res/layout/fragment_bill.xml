@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/sp_12"
+    android:layout_marginRight="@dimen/sp_12"
     android:fitsSystemWindows="true"
     tools:context=".ui.bill.BillFragment">
 
@@ -28,6 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/recyclerView">
 
         <TextView
+            style="@style/TextAppearance.SecureQRReader.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -38,11 +41,11 @@
 
         <TextView
             android:id="@+id/tvTotalBill"
+            style="@style/TextAppearance.SecureQRReader.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
             android:layout_weight=".5"
-            android:text="Rs. "
+            android:gravity="right"
             android:textSize="@dimen/sp_26"
             android:textStyle="bold" />
 
@@ -50,9 +53,11 @@
 
     <Button
         android:id="@+id/btBill"
+        style="@style/TextAppearance.SecureQRReader.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/sp_12"
         android:text="@string/generate_bill"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/layoutTotal" />
 </androidx.constraintlayout.widget.ConstraintLayout>

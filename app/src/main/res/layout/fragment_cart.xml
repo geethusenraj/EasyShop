@@ -24,10 +24,12 @@
 
             <TextView
                 android:id="@+id/tvProductName"
+                style="@style/TextAppearance.SecureQRReader.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Product" />
+                android:text="Product"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -39,10 +41,12 @@
 
             <TextView
                 android:id="@+id/tvQuantity"
+                style="@style/TextAppearance.SecureQRReader.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Quantity" />
+                android:text="Quantity"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -54,10 +58,12 @@
 
             <TextView
                 android:id="@+id/tvRate"
+                style="@style/TextAppearance.SecureQRReader.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Rate" />
+                android:text="Rate"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>
@@ -67,7 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/sp_1"
         android:layout_margin="@dimen/sp_12"
-        android:background="@color/grey"
+        android:background="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/layoutHeadline" />
 
 
@@ -75,7 +81,8 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/sp_80"
+        android:layout_marginTop="@dimen/sp_50"
+        android:layout_marginBottom="@dimen/sp_60"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"
         app:layoutManager="LinearLayoutManager"

@@ -32,7 +32,7 @@ class CartRecyclerViewAdapter(
             itemView.apply {
 
                 tvProductName.text = cartEntity.name
-                tvRate.text = cartEntity.rate.toString()
+                tvRate.text = "Rs.${cartEntity.rate}-/-"
                 if (fragment is CartFragment) {
                     tvQuantity.text = cartEntity.quantity.toString()
                 }
