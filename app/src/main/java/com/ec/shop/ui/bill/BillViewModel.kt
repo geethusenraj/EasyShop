@@ -1,13 +1,12 @@
 package com.ec.shop.ui.bill
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.app.Application
 import androidx.lifecycle.ViewModel
+import com.ec.shop.data.repositories.CartRepository
 
-class BillViewModel : ViewModel() {
+class BillViewModel(
+    private val application: Application,
+    private val cartRepository: CartRepository
+) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val text: LiveData<String> = _text
 }

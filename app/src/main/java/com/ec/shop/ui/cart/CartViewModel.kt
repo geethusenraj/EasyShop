@@ -11,20 +11,9 @@ class CartViewModel(
     private val application: Application,
     private val cartRepository: CartRepository
 ) : ViewModel() {
-
     var productData: LiveData<List<CartEntity>> = MutableLiveData()
-
 
     init {
         productData = cartRepository.getData()
     }
-//    fun getProductData() {
-//        productData.value= cartRepository.getData()
-//        viewModelScope.launch(Dispatchers.IO) {
-//            _productData.postValue(cartRepository.getData())
-//        }
-
-//    }
-
-
 }

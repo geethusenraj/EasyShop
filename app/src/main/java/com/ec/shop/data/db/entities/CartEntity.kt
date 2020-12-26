@@ -26,8 +26,11 @@ class CartEntity {
     var name: String? = null
 
     @ColumnInfo(name = "ProductRate")
-    var rate: String? = null
+    var rate: Double = 0.0
 
     @ColumnInfo(name = "Quantity")
     var quantity: Int = 0
+
+    @ColumnInfo(name = "Total")
+    var total: Double = 0.0
 }

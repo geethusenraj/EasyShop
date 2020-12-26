@@ -15,9 +15,10 @@ interface CartDao {
     suspend fun upsert(cartEntity: CartEntity) {
         val exist = getProductCount(cartEntity.name)
         when {
-            exist >= 1 -> updateCart(cartEntity.name, exist + 1)
+            exist >= 1 -> updateCart(cartEntity.name, exist + 1, (exist + 1) * (cartEntity.rate))
             else -> {
                 cartEntity.quantity = 1
+                cartEntity.total = cartEntity.quantity * cartEntity.rate
                 insert(cartEntity)
             }
         }
@@ -27,8 +28,8 @@ interface CartDao {
     fun getProductCount(name: String?): Int
 
 
-    @Query("UPDATE CartTable SET Quantity=:quantity WHERE ProductName =:name")
-    suspend fun updateCart(name: String?, quantity: Int)
+    @Query("UPDATE CartTable SET Quantity=:quantity, Total=:total WHERE ProductName =:name")
+    suspend fun updateCart(name: String?, quantity: Int, total: Double)
 
     @Query("SELECT * FROM CartTable")
     fun getData(): LiveData<List<CartEntity>>

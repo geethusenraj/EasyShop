@@ -19,7 +19,7 @@ class ScanViewModel(
             qrResult.contains("*") -> {
                 val textSplit = qrResult.split("*")
                 viewModelScope.launch(Dispatchers.IO) {
-                    cartRepository.saveUserData(Product(textSplit[1], textSplit[2]))
+                    cartRepository.saveUserData(Product(textSplit[1], textSplit[2].toDouble()))
                 }
             }
         }

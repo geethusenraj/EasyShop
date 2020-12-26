@@ -39,7 +39,7 @@ class CartFragment : Fragment() {
     ): View? {
         mView = inflater.inflate(R.layout.fragment_cart, container, false)
         mView.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = CartRecyclerViewAdapter(arrayListOf())
+        adapter = CartRecyclerViewAdapter(arrayListOf(), this@CartFragment)
         mView.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 mView.recyclerView.context,
