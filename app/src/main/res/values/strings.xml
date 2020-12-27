@@ -20,6 +20,8 @@
     <string name="add_to_cart">Product added to cart</string>
     <string name="empty_result">Please focus the barcode properly</string>
     <string name="generate_bill">Generate Bill</string>
+    <string name="bill_generated_success">Bill generated successfully</string>
+    <string name="bill_generated_failed">Error occurred while generating the bill </string>
 
     <string-array name="phone_number_content" translatable="false">
         <item>+201007686386</item>

@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ec.shop.R
 import com.ec.shop.ui.adapters.CartRecyclerViewAdapter
 import com.ec.shop.ui.cart.CartViewModel
-import com.ec.shop.utils.PDFGenerator
 import com.ec.shop.utils.ViewModelFactory
+import com.ec.shop.utils.showSnackBar
 import kotlinx.android.synthetic.main.fragment_bill.*
 import kotlinx.android.synthetic.main.fragment_bill.view.*
 import kotlinx.android.synthetic.main.fragment_cart.view.*
@@ -32,13 +32,11 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private lateinit var root: View
     private lateinit var bitmap: Bitmap
     private lateinit var viewModel: CartViewModel
-    private lateinit var pdfGenerator: PDFGenerator
     private lateinit var adapter: CartRecyclerViewAdapter
 
 
     companion object {
         const val WRITE_EXTERNAL_STORAGE = 2
-        const val READ_EXTERNAL_STORAGE = 3
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,10 +58,6 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         root.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = CartRecyclerViewAdapter(arrayListOf(), this@BillFragment)
         root.recyclerView.adapter = adapter
-
-//        pdfGenerator = PDFGenerator(root.recyclerView)
-//        val rvBitmap = pdfGenerator.getScreenshotFromRecyclerView(root.recyclerView);
-//        pdfGenerator.createPdfFile(rvBitmap, requireActivity())
         viewModel.productData.observe(requireActivity(), Observer {
             adapter.apply {
                 addCartData(it)
@@ -71,7 +65,12 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
             val billAmount = it.map { price -> price.total }.sum()
             root.tvTotalBill.text = "Rs.$billAmount-/-"
-
+        })
+        viewModel.updateStatus.observe(requireActivity(), Observer {
+            when (it) {
+                true -> root.showSnackBar(getString(R.string.bill_generated_success))
+                false -> root.showSnackBar(getString(R.string.bill_generated_failed))
+            }
         })
 
         root.btBill.setOnClickListener {
@@ -82,82 +81,13 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun initPdf() {
-//        Log.d("size", " " + root.rootLayout.width + "  " + root.rootLayout.height);
         bitmap = loadBitmapFromView(
             root.layoutTotal,
             root.layoutTotal.width,
             root.layoutTotal.height
         )
 
-//        createPdf()
-
     }
-
-//    private fun createPdf() {
-//        //  Display display = wm.getDefaultDisplay();
-//
-//        val windowManager = requireActivity().getSystemService(WINDOW_SERVICE) as WindowManager
-//        val displayMetrics = DisplayMetrics()
-//        windowManager.defaultDisplay.getMetrics(displayMetrics)
-//        val height = displayMetrics.heightPixels.toFloat()
-//        val width = displayMetrics.widthPixels.toFloat()
-//        val convertHeight = height.toInt()
-//        val convertWidth = width.toInt()
-//        val document = PdfDocument()
-//        val pageInfo = PdfDocument.PageInfo.Builder(convertWidth, convertHeight, 1).create()
-//        val page = document.startPage(pageInfo)
-//        val canvas: Canvas = page.canvas
-//        val paint = Paint()
-//        canvas.drawPaint(paint)
-//        bitmap =
-//            Bitmap.createScaledBitmap(bitmap, convertWidth, convertHeight, true)
-//        paint.color = Color.BLUE
-//        canvas.drawBitmap(bitmap, 0f, 0f, null)
-//        document.finishPage(page)
-//
-//        // write the document content
-//        val targetPdf = "/sdcard/pdffromlayout.pdf"
-//        val filePath: File
-//        filePath = File(targetPdf)
-//        try {
-//            document.writeTo(FileOutputStream(filePath))
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//            Toast.makeText(requireContext(), "Something wrong: $e", Toast.LENGTH_LONG)
-//                .show()
-//        }
-//
-//        // close the document
-//        document.close()
-//        Toast.makeText(requireContext(), "PDF is created!!!", Toast.LENGTH_SHORT).show()
-//        openGeneratedPDF()
-//    }
-
-//    private fun openGeneratedPDF() {
-//        val file = File("/sdcard/pdffromlayout.pdf")
-//        if (file.exists()) {
-//            val intent = Intent(Intent.ACTION_VIEW)
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-////            val uri: Uri = Uri.fromFile(file)
-//            val uri = FileProvider.getUriForFile(
-//                requireContext(),
-//                requireContext().applicationContext.packageName.toString() + ".provider",
-//                file
-//            )
-//
-//            intent.setDataAndType(uri, "application/pdf")
-//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-//            try {
-//                startActivity(intent)
-//            } catch (e: ActivityNotFoundException) {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "No Application available to view pdf",
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        }
-//    }
 
     private fun loadBitmapFromView(
         recyclerView: LinearLayout,
@@ -176,14 +106,12 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         initPdf()
         val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
         if (EasyPermissions.hasPermissions(requireContext(), permission)) {
-            val pdfGenerator = PDFGenerator(root.recyclerView)
-            val bitmapBill = pdfGenerator.getScreenshotFromRecyclerView(
+            val bitmapBill = viewModel.getScreenshotFromRecyclerView(
                 root.recyclerView,
                 root.layoutTotal,
-                bitmap, requireActivity()
+                bitmap
             )
-            pdfGenerator.createPdfFile(bitmapBill, requireActivity())
-//            initPdf()
+            bitmapBill?.let { viewModel.createPdfFile(it) }
         } else {
             EasyPermissions.requestPermissions(
                 this, getString(R.string.write_permission_content),
