@@ -7,6 +7,7 @@
     <string name="camera_permission_explanation">I need to access your camera to scan the QR code</string>
     <string name="permission_required_dialog_title">Necessary permission</string>
     <string name="permission_required_dialog_content">I need the camera permission to let you scan the QR code</string>
+    <string name="write_permission_content">Allow Pdf from XML layout to access photos, media and files on your device?</string>
     <string name="turn_on_flash">Turn on flash</string>
     <string name="qr_result_open">Open</string>
     <string name="qr_result_copy">Copy</string>

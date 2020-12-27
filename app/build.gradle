@@ -56,6 +56,18 @@ android {
             force("org.antlr:antlr4-tool:4.7.1")
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/*.kotlin_module")
+    }
 }
 
 dependencies {
@@ -82,6 +94,7 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.0-RC3'
     kapt "androidx.room:room-compiler:2.2.1"
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
