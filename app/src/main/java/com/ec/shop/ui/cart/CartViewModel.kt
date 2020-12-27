@@ -125,7 +125,7 @@ class CartViewModel(
         }
     }
 
-    private fun createPdfDirectory(): File? {
+    fun createPdfDirectory(): File? {
         val pdfDirectory = File(
             (application.applicationContext.getExternalFilesDir(null)).toString() +
                     File.separator + Constants.PDF_DIRECTORY
