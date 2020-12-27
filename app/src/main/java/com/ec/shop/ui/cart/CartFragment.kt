@@ -11,8 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ec.shop.R
+import com.ec.shop.data.db.entities.CartEntity
+import com.ec.shop.listeners.ProjectEventListeners
 import com.ec.shop.ui.adapters.CartRecyclerViewAdapter
 import com.ec.shop.utils.ViewModelFactory
+import kotlinx.android.synthetic.main.fragment_cart.*
 import kotlinx.android.synthetic.main.fragment_cart.view.*
 
 class CartFragment : Fragment() {
@@ -39,7 +42,14 @@ class CartFragment : Fragment() {
     ): View? {
         mView = inflater.inflate(R.layout.fragment_cart, container, false)
         mView.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = CartRecyclerViewAdapter(arrayListOf(), this@CartFragment)
+        val onListItemClick: ProjectEventListeners.OnListItemClick = object :
+            ProjectEventListeners.OnListItemClick {
+            override fun onClick(view: View?, position: Int, cartEntity: CartEntity) {
+                viewModel.deleteCartItem(cartEntity = cartEntity)
+            }
+
+        }
+        adapter = CartRecyclerViewAdapter(arrayListOf(), this@CartFragment, onListItemClick)
         mView.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 mView.recyclerView.context,

@@ -34,4 +34,7 @@ interface CartDao {
     @Query("SELECT * FROM CartTable")
     fun getData(): LiveData<List<CartEntity>>
 
+    @Query("DELETE FROM CartTable WHERE ProductName=:name")
+    suspend fun deleteItem(name: String)
+
 }

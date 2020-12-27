@@ -13,10 +13,13 @@ import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.ec.shop.constants.Constants
 import com.ec.shop.data.db.entities.CartEntity
 import com.ec.shop.data.repositories.CartRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -135,6 +138,14 @@ class CartViewModel(
         }
 
         return pdfDirectory
+    }
+
+    fun deleteCartItem(cartEntity: CartEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            CartRepository(application)
+                .deleteCartItem(cartEntity)
+        }
+
     }
 
 

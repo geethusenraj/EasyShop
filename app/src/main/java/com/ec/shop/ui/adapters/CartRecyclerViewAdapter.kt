@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.ec.shop.R
 import com.ec.shop.data.db.entities.CartEntity
+import com.ec.shop.listeners.ProjectEventListeners
 import com.ec.shop.ui.bill.BillFragment
 import com.ec.shop.ui.cart.CartFragment
 import kotlinx.android.synthetic.main.fragment_cart.view.tvProductName
@@ -16,25 +17,32 @@ import kotlinx.android.synthetic.main.row_item_bill.view.*
 import kotlinx.android.synthetic.main.row_item_cart.view.*
 import kotlinx.android.synthetic.main.row_item_cart.view.tvQuantity
 
+
 class CartRecyclerViewAdapter(
     private val productList: ArrayList<CartEntity>,
-    private val fragment: Fragment
+    private val fragment: Fragment,
+    var onListItemClick: ProjectEventListeners.OnListItemClick?
 ) :
     RecyclerView.Adapter<CartRecyclerViewAdapter.DataViewHolder>() {
+
 
     class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(cartEntity: CartEntity, fragment: Fragment) {
-            itemView.apply {
-
-            }
+        fun bind(
+            cartEntity: CartEntity, fragment: Fragment, position: Int,
+            holder: DataViewHolder,
+            onListItemClick: ProjectEventListeners.OnListItemClick
+        ) {
             itemView.apply {
 
                 tvProductName.text = cartEntity.name
                 tvRate.text = "Rs.${cartEntity.rate}-/-"
                 if (fragment is CartFragment) {
                     tvQuantity.text = cartEntity.quantity.toString()
+                    layoutDelete.setOnClickListener {
+                        onListItemClick.onClick(itemView, position, cartEntity)
+                    }
                 }
                 if (fragment is BillFragment) {
                     tvQuantity.text = "${cartEntity.quantity}x"
@@ -46,6 +54,7 @@ class CartRecyclerViewAdapter(
 //                }
             }
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
@@ -68,7 +77,7 @@ class CartRecyclerViewAdapter(
     override fun getItemCount(): Int = productList.size
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        holder.bind(productList[position], fragment)
+        onListItemClick?.let { holder.bind(productList[position], fragment, position, holder, it) }
     }
 
     fun addCartData(cartEntity: List<CartEntity>) {
@@ -78,5 +87,12 @@ class CartRecyclerViewAdapter(
         }
 
     }
+
+    fun setClickListener(context: ProjectEventListeners.OnListItemClick) {
+        this.onListItemClick = context;
+
+    }
+
+
 }
 

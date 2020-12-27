@@ -21,6 +21,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ec.shop.R
 import com.ec.shop.constants.Constants
+import com.ec.shop.data.db.entities.CartEntity
+import com.ec.shop.listeners.ProjectEventListeners.OnListItemClick
 import com.ec.shop.ui.adapters.CartRecyclerViewAdapter
 import com.ec.shop.ui.cart.CartViewModel
 import com.ec.shop.utils.ViewModelFactory
@@ -67,8 +69,15 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     ): View {
         root = inflater.inflate(R.layout.fragment_bill, container, false)
         root.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = CartRecyclerViewAdapter(arrayListOf(), this@BillFragment)
+        val onListItemClick: OnListItemClick = object : OnListItemClick {
+            override fun onClick(view: View?, position: Int, cartEntity: CartEntity) {
+            }
+        }
+        adapter = CartRecyclerViewAdapter(arrayListOf(), this@BillFragment, onListItemClick)
+
+        adapter.setClickListener(onListItemClick)
         root.recyclerView.adapter = adapter
+
         viewModel.productData.observe(requireActivity(), Observer {
             if (it.isNotEmpty()) {
                 root.tvNoPreview.visibility = View.GONE

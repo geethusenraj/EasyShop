@@ -18,5 +18,9 @@ class CartRepository(application: Application) {
         return cartDao.getData()
     }
 
+    suspend fun deleteCartItem(cartEntity: CartEntity) {
+        cartEntity.name?.let { cartDao.deleteItem(it) }
+    }
+
 }
 
