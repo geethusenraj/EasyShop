@@ -25,11 +25,16 @@ import com.ec.shop.ui.adapters.CartRecyclerViewAdapter
 import com.ec.shop.ui.cart.CartViewModel
 import com.ec.shop.utils.ViewModelFactory
 import com.ec.shop.utils.showSnackBar
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.fragment_bill.*
 import kotlinx.android.synthetic.main.fragment_bill.view.*
 import kotlinx.android.synthetic.main.fragment_cart.view.*
 import kotlinx.android.synthetic.main.fragment_cart.view.recyclerView
-import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
 
@@ -65,6 +70,13 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         adapter = CartRecyclerViewAdapter(arrayListOf(), this@BillFragment)
         root.recyclerView.adapter = adapter
         viewModel.productData.observe(requireActivity(), Observer {
+            if (it.isNotEmpty()) {
+                root.tvNoPreview.visibility = View.GONE
+                root.layoutContent.visibility = View.VISIBLE
+            } else {
+                root.layoutContent.visibility = View.GONE
+                root.tvNoPreview.visibility = View.VISIBLE
+            }
             adapter.apply {
                 addCartData(it)
                 notifyDataSetChanged()
@@ -73,10 +85,15 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             root.tvTotalBill.text = "Rs.$billAmount-/-"
         })
         viewModel.updateStatus.observe(requireActivity(), Observer {
+
+            val activity = requireActivity().application;
+
             when (it) {
                 true -> {
-                    root.showSnackBar(getString(R.string.bill_generated_success))
-                    showEmailAlertDialog()
+                    if (activity != null && isAdded) {
+                        root.rootView.showSnackBar(getString(R.string.bill_generated_success))
+                        showEmailAlertDialog()
+                    }
                 }
                 false -> root.showSnackBar(getString(R.string.bill_generated_failed))
             }
@@ -113,7 +130,7 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 etEmail.error = ""
                 shareViaEmail(etEmail.text.toString())
             }
-//            alertDialog.dismiss()
+            alertDialog.dismiss()
         }
         alertDialog.show()
     }
@@ -138,24 +155,45 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         return b
     }
 
-    @SuppressLint("ObsoleteSdkInt")
-    @AfterPermissionGranted(WRITE_EXTERNAL_STORAGE)
     private fun requestPermission() {
         initPdf()
-        val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
-        if (EasyPermissions.hasPermissions(requireContext(), permission)) {
-            val bitmapBill = viewModel.getScreenshotFromRecyclerView(
-                root.recyclerView,
-                root.layoutTotal,
-                bitmap
-            )
-            bitmapBill?.let { viewModel.createPdfFile(it) }
-        } else {
-            EasyPermissions.requestPermissions(
-                this, getString(R.string.write_permission_content),
-                WRITE_EXTERNAL_STORAGE, permission
-            )
-        }
+        Dexter.withContext(requireContext())
+            .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .withListener(object : PermissionListener {
+                override fun onPermissionGranted(permissionGrantedResponse: PermissionGrantedResponse) {
+                    val bitmapBill = viewModel.getScreenshotFromRecyclerView(
+                        root.recyclerView,
+                        root.layoutTotal,
+                        bitmap
+                    )
+                    bitmapBill?.let { viewModel.createPdfFile(it) }
+                }
+
+                override fun onPermissionDenied(permissionDeniedResponse: PermissionDeniedResponse) {}
+                override fun onPermissionRationaleShouldBeShown(
+                    permissionRequest: PermissionRequest,
+                    permissionToken: PermissionToken
+                ) {
+                    permissionToken.continuePermissionRequest()
+                }
+            })
+            .check()
+
+
+//        val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+//        if (EasyPermissions.hasPermissions(requireContext(), permission)) {
+//            val bitmapBill = viewModel.getScreenshotFromRecyclerView(
+//                root.recyclerView,
+//                root.layoutTotal,
+//                bitmap
+//            )
+//            bitmapBill?.let { viewModel.createPdfFile(it) }
+//        } else {
+//            EasyPermissions.requestPermissions(
+//                this, getString(R.string.write_permission_content),
+//                WRITE_EXTERNAL_STORAGE, permission
+//            )
+//        }
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {

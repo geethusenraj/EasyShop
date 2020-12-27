@@ -76,6 +76,17 @@
         android:background="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/layoutHeadline" />
 
+    <TextView
+        android:id="@+id/tvNoContent"
+        style="@style/TextAppearance.SecureQRReader.Body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/empty"
+        android:textColor="@color/black"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/layoutHeadline" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -85,6 +96,7 @@
         android:layout_marginBottom="@dimen/sp_60"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical"
+        android:visibility="gone"
         app:layoutManager="LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/vLine"
         tools:listitem="@layout/row_item_cart" />

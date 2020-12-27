@@ -52,6 +52,13 @@ class CartFragment : Fragment() {
 
 
         viewModel.productData.observe(requireActivity(), Observer {
+            if (it.isNotEmpty()) {
+                mView.tvNoContent.visibility = View.GONE
+                mView.recyclerView.visibility = View.VISIBLE
+            } else {
+                mView.recyclerView.visibility = View.GONE
+                mView.tvNoContent.visibility = View.VISIBLE
+            }
             adapter.apply {
                 addCartData(it)
                 notifyDataSetChanged()

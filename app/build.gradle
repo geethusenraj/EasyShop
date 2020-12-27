@@ -88,6 +88,7 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.google.zxing:core:3.3.0'
     //QR Code Library
+    implementation 'com.karumi:dexter:6.2.0'
     implementation 'me.dm7.barcodescanner:zbar:1.9.13'
     implementation('com.journeyapps:zxing-android-embedded:4.1.0') { transitive = false }
     implementation 'androidx.room:room-runtime:2.2.6'
