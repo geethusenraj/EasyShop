@@ -48,6 +48,10 @@ class CartFragment : Fragment() {
                 viewModel.deleteCartItem(cartEntity = cartEntity)
             }
 
+            override fun onQuantityChanged(cartEntity: CartEntity, quantity: Int) {
+                viewModel.updateCartQuantity(cartEntity, quantity)
+            }
+
         }
         adapter = CartRecyclerViewAdapter(arrayListOf(), this@CartFragment, onListItemClick)
         mView.recyclerView.addItemDecoration(

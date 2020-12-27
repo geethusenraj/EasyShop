@@ -96,6 +96,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'org.apache.pdfbox:pdfbox:2.0.0-RC3'
+    implementation 'me.himanshusoni.quantityview:quantity-view:1.2.0'
     kapt "androidx.room:room-compiler:2.2.1"
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -148,5 +148,12 @@ class CartViewModel(
 
     }
 
+    fun updateCartQuantity(cartEntity: CartEntity, quantity: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            CartRepository(application)
+                .updateQty(cartEntity, quantity,(cartEntity.rate)*quantity)
+        }
+    }
+
 
 }

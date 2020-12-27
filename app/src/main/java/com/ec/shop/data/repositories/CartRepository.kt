@@ -22,5 +22,9 @@ class CartRepository(application: Application) {
         cartEntity.name?.let { cartDao.deleteItem(it) }
     }
 
+    suspend fun updateQty(cartEntity: CartEntity, quantity: Int, total: Double) {
+        cartDao.updateCart(cartEntity.name, quantity, total)
+    }
+
 }
 

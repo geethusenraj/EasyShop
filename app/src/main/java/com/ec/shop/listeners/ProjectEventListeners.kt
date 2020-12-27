@@ -14,5 +14,6 @@ interface ProjectEventListeners {
 
     interface OnListItemClick {
         fun onClick(view: View?, position: Int, cartEntity: CartEntity)
+        fun onQuantityChanged(cartEntity: CartEntity, quantity: Int)
     }
 }

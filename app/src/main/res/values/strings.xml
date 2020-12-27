@@ -26,6 +26,7 @@
     <string name="generate_bill">Generate Bill</string>
     <string name="bill_generated_success">Bill generated successfully</string>
     <string name="bill_generated_failed">Error occurred while generating the bill </string>
+    <string name="number_picker_formatter">%02d</string>
 
     <string-array name="phone_number_content" translatable="false">
         <item>+201007686386</item>

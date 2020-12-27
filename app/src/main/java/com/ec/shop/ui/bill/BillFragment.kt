@@ -72,6 +72,11 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         val onListItemClick: OnListItemClick = object : OnListItemClick {
             override fun onClick(view: View?, position: Int, cartEntity: CartEntity) {
             }
+
+            override fun onQuantityChanged(cartEntity: CartEntity, quantity: Int) {
+
+            }
+
         }
         adapter = CartRecyclerViewAdapter(arrayListOf(), this@BillFragment, onListItemClick)
 
