@@ -8,5 +8,7 @@ class Constants {
         const val VERIFICATION_FAILED = "ERROR "
         const val OTP_SENT = "OTP Sent"
         const val SHOW_DIALOG = "showDialog"
+        const val PDF_DIRECTORY = "BILL"
+        const val PDF_BILL = "Bill_Amount.pdf"
     }
 }

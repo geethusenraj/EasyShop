@@ -14,8 +14,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
+import com.ec.shop.constants.Constants
 import com.ec.shop.data.db.entities.CartEntity
 import com.ec.shop.data.repositories.CartRepository
+import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -99,8 +101,9 @@ class CartViewModel(
     }
 
     fun createPdfFile(rvBitmap: Bitmap) {
+        val filePath = createPdfDirectory()
         try {
-            val pdfFile = "/sdcard/pdffromlayout.pdf"
+            val pdfFile = "${filePath?.absolutePath}/${Constants.PDF_BILL}"
             val fOut = FileOutputStream(pdfFile)
             val document = PdfDocument()
             val pageInfo = PageInfo.Builder(
@@ -121,5 +124,18 @@ class CartViewModel(
             e.printStackTrace()
         }
     }
+
+    private fun createPdfDirectory(): File? {
+        val pdfDirectory = File(
+            (application.applicationContext.getExternalFilesDir(null)).toString() +
+                    File.separator + Constants.PDF_DIRECTORY
+        )
+        if (!pdfDirectory.exists()) {
+            pdfDirectory.mkdir()
+        }
+
+        return pdfDirectory
+    }
+
 
 }
