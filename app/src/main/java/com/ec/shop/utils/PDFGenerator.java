@@ -1,11 +1,13 @@
 package com.ec.shop.utils;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.collection.LruCache;
@@ -23,8 +25,13 @@ public class PDFGenerator {
     }
 
 
-    public Bitmap getScreenshotFromRecyclerView(RecyclerView view, Bitmap totalBitmap) {
+    @SuppressLint("ResourceAsColor")
+    public Bitmap getScreenshotFromRecyclerView(RecyclerView view,
+                                                LinearLayout view2,
+                                                Bitmap amountBitmap,
+                                                FragmentActivity context) {
         RecyclerView.Adapter adapter = view.getAdapter();
+        Bitmap billBitmap = null;
         Bitmap bigBitmap = null;
         if (adapter != null) {
             int size = adapter.getItemCount();
@@ -53,18 +60,26 @@ public class PDFGenerator {
                 height += holder.itemView.getMeasuredHeight();
             }
 
-            bigBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), height, Bitmap.Config.ARGB_8888);
-            Canvas bigCanvas = new Canvas(bigBitmap);
-            bigCanvas.drawColor(Color.WHITE);
+            billBitmap = Bitmap.createBitmap(view.getMeasuredWidth(), height, Bitmap.Config.ARGB_8888);
+            Canvas billCanvas = new Canvas(billBitmap);
+            billCanvas.drawColor(Color.WHITE);
 
             for (int i = 0; i < size; i++) {
                 Bitmap bitmap = bitmaCache.get(String.valueOf(i));
-                bigCanvas.drawBitmap(bitmap, 0f, iHeight, paint);
+                billCanvas.drawBitmap(bitmap, 0f, iHeight, paint);
                 iHeight += bitmap.getHeight();
                 bitmap.recycle();
             }
-            bigCanvas.drawBitmap(totalBitmap, 0, 200, null);
-            totalBitmap.recycle();
+            Canvas amountCanvas = new Canvas(amountBitmap);
+            amountCanvas.drawBitmap(amountBitmap, 0, view2.getHeight(), null);
+
+            bigBitmap = Bitmap.createBitmap(view.getMeasuredWidth(),
+                    height + view2.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bigBitmap);
+            canvas.drawBitmap(billBitmap, 0, view2.getHeight(), null);
+            canvas.drawBitmap(amountBitmap, 0, 0, null);
+            billBitmap.recycle();
+            amountBitmap.recycle();
 
         }
 

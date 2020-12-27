@@ -177,7 +177,11 @@ class BillFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
         if (EasyPermissions.hasPermissions(requireContext(), permission)) {
             val pdfGenerator = PDFGenerator(root.recyclerView)
-            val bitmapBill = pdfGenerator.getScreenshotFromRecyclerView(root.recyclerView,bitmap)
+            val bitmapBill = pdfGenerator.getScreenshotFromRecyclerView(
+                root.recyclerView,
+                root.layoutTotal,
+                bitmap, requireActivity()
+            )
             pdfGenerator.createPdfFile(bitmapBill, requireActivity())
 //            initPdf()
         } else {
