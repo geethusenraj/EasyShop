@@ -37,7 +37,4 @@ interface CartDao {
     @Query("DELETE FROM CartTable WHERE ProductName=:name")
     suspend fun deleteItem(name: String)
 
-//    @Query("UPDATE CartTable SET Quantity=:quantity WHERE ProductName =:it")
-//    suspend fun updateQty(it: String?, quantity: Int)
-
 }

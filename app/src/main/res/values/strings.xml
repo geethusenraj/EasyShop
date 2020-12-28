@@ -27,6 +27,7 @@
     <string name="bill_generated_success">Bill generated successfully</string>
     <string name="bill_generated_failed">Error occurred while generating the bill </string>
     <string name="number_picker_formatter">%02d</string>
+    <string name="max_limit">"Maximum limit reached. To add more you need to scan again."</string>
 
     <string-array name="phone_number_content" translatable="false">
         <item>+201007686386</item>

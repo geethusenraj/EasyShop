@@ -46,8 +46,16 @@ class CartRecyclerViewAdapter(
                 tvProductName.text = cartEntity.name
                 tvRate.text = "Rs.${cartEntity.rate}-/-"
                 if (fragment is CartFragment) {
-                    qtyView.quantity = cartEntity.quantity
-                    qtyView.onQuantityChangeListener = this@DataViewHolder
+                    if (cartEntity.quantity > 9) {
+                        tvQnty.text = cartEntity.quantity.toString()
+                        tvQnty.visibility = View.VISIBLE
+                        qtyView.visibility = View.GONE
+                    } else {
+                        tvQnty.visibility = View.GONE
+                        qtyView.visibility = View.VISIBLE
+                        qtyView.quantity = cartEntity.quantity
+                        qtyView.onQuantityChangeListener = this@DataViewHolder
+                    }
                     layoutDelete.setOnClickListener {
                         onListItemClick.onClick(itemView, position, cartEntity)
                     }
@@ -71,7 +79,7 @@ class CartRecyclerViewAdapter(
         }
 
         override fun onLimitReached() {
-            itemView.showSnackBar("Maximum limit reached.")
+            itemView.showSnackBar(itemView.resources.getString(R.string.max_limit))
         }
 
     }

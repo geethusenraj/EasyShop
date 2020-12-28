@@ -37,19 +37,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight=".8">
+                android:layout_weight=".8"
+                android:orientation="horizontal">
 
                 <!--                <NumberPicker-->
                 <!--                    android:id="@+id/numberPicker"-->
                 <!--                    android:layout_width="match_parent"-->
                 <!--                    android:layout_height="@dimen/sp_50" />-->
 
-                <!--                <TextView-->
-                <!--                    android:id="@+id/tvQuantity"-->
-                <!--                    style="@style/TextAppearance.SecureQRReader.Body"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:padding="5dp" />-->
+                <TextView
+                    android:id="@+id/tvQnty"
+                    style="@style/TextAppearance.SecureQRReader.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:visibility="gone" />
 
 
                 <!--                <EditText-->
@@ -70,6 +73,7 @@
                     android:id="@+id/qtyView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:qv_maxQuantity="9"
                     app:qv_minQuantity="1" />
 
