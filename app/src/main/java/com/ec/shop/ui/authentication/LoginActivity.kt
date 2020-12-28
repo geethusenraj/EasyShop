@@ -1,12 +1,14 @@
 package com.ec.shop.ui.authentication
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.ec.shop.R
 import com.ec.shop.constants.Constants
+import com.ec.shop.constants.Constants.Companion.IS_LOGGED_IN
+import com.ec.shop.data.preference.PreferenceHelper
+import com.ec.shop.data.preference.PreferenceHelper.set
 import com.ec.shop.databinding.ActivityLoginBinding
 import com.ec.shop.listeners.ProjectEventListeners
 import com.ec.shop.ui.BaseActivity
@@ -22,23 +24,23 @@ class LoginActivity : BaseActivity() {
 
     private lateinit var mBinder: ActivityLoginBinding
     private lateinit var viewModel: LoginViewModel
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinder = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(mBinder.root)
 
+        sharedPref = PreferenceHelper.defaultPrefs(this)
+
         viewModel = ViewModelProvider(this, ViewModelFactory(application = application))
             .get(LoginViewModel::class.java)
         viewModel.startFirebaseLogin()
-        val adapter = ArrayAdapter(
-            this, R.layout.item_drop_down,
-            resources.getStringArray(R.array.phone_number_content)
-        )
+
         defineObservers()
 
 
-        mBinder.tvAutocomplete.setAdapter(adapter)
+//        mBinder.tvAutocomplete.setAdapter(adapter)
 
         viewModel.setPhoneNumber()
 
@@ -61,8 +63,10 @@ class LoginActivity : BaseActivity() {
         })
         viewModel.otpStatus.observe(this, Observer {
             mBinder.root.showSnackBar(it)
-            if (it == "Correct OTP")
-                openActivity(HomeActivity::class.java);
+            if (it == "Correct OTP") {
+                sharedPref[IS_LOGGED_IN] = true
+                openActivity(HomeActivity::class.java)
+            }
         })
         viewModel.otpTimer.observe(this, Observer {
             Log.e("TIMER_it", it)
@@ -73,7 +77,7 @@ class LoginActivity : BaseActivity() {
         })
         viewModel.sendOtpEventAction.observe(this, Observer {
             PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                mBinder.tvAutocomplete.text.toString(),
+                "+91" + mBinder.tvAutocomplete.text.toString(),
                 Constants.TIME_OUT.toLong(),
                 TimeUnit.SECONDS,
                 this,

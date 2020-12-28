@@ -37,4 +37,6 @@ interface CartDao {
     @Query("DELETE FROM CartTable WHERE ProductName=:name")
     suspend fun deleteItem(name: String)
 
+    @Query("DELETE FROM CartTable")
+    suspend fun clearDb()
 }

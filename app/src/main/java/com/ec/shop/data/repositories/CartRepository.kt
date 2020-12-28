@@ -26,5 +26,9 @@ class CartRepository(application: Application) {
         cartDao.updateCart(cartEntity.name, quantity, total)
     }
 
+    suspend fun clearDB() {
+        cartDao.clearDb()
+    }
+
 }
 

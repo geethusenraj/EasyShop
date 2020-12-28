@@ -106,7 +106,7 @@ class LoginViewModel(private val application: Application) : ViewModel() {
             _sendOtpEventAction.value = Any()
         } else {
             _updateKeyboard.value = true
-            _otpStatus.value = "Please type phone number or pick from list"
+            _otpStatus.value = "Please type phone number"
         }
     }
 

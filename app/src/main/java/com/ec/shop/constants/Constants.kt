@@ -10,5 +10,6 @@ class Constants {
         const val SHOW_DIALOG = "showDialog"
         const val PDF_DIRECTORY = "BILL"
         const val PDF_BILL = "Bill_Amount.pdf"
+        const val IS_LOGGED_IN = "isLoggedIn"
     }
 }
